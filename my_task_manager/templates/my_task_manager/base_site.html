@@ -1,0 +1,22 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Task Manager{% endblock %}</title>
+    </head>
+    <body>
+        {% block header %}
+            <section>
+                <header>
+                    <form action="" method="post"><h4>
+                        Welcome, {{ user.get_username }}!
+                        <input type="submit" value="logout">
+                    </h4></form>
+                </header>
+            </section>
+        {% endblock %}
+        {% block content %}{% endblock %}
+    </body>
+</html>
