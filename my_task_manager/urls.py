@@ -14,4 +14,5 @@ urlpatterns = [
         name='task_detail'),
     url(r'^tasks/(?P<pk>[0-9]+)/completed/$', views.complete_task,
         name='task_complete'),
+    url(r'^tasks/$', views.all_tasks_view, name='all_tasks'),
 ]

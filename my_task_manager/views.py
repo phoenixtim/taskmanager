@@ -6,6 +6,7 @@ from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.utils import timezone
+import datetime
 
 from .models import Task
 
@@ -101,3 +102,76 @@ def complete_task(request, pk):
         task.completed = True
         task.save()
         return HttpResponseRedirect(reverse('my_task_manager:main'))
+
+
+@login_required
+def all_tasks_view(request):
+    if len(request.GET) != 0:
+        # creator_name = request.GET['creator']
+        creator = User.objects.filter(username=request.GET['creator'])
+        # responsible_name = request.GET['responsible']
+        responsible = User.objects.filter(username=request.GET['responsible'])
+        is_created_from = request.GET.get('created_from', False)
+        created_from = datetime.datetime(
+                int(request.GET['created_from_year']),
+                int(request.GET['created_from_month']),
+                int(request.GET['created_from_day']),
+                int(request.GET['created_from_hour']),
+                int(request.GET['created_from_minute'])
+        )
+        is_created_to = request.GET.get('created_to', False)
+        created_to = datetime.datetime(
+                int(request.GET['created_to_year']),
+                int(request.GET['created_to_month']),
+                int(request.GET['created_to_day']),
+                int(request.GET['created_to_hour']),
+                int(request.GET['created_to_minute'])
+        )
+        is_finished_from = request.GET.get('finished_from', False)
+        finished_from = datetime.datetime(
+                int(request.GET['finished_from_year']),
+                int(request.GET['finished_from_month']),
+                int(request.GET['finished_from_day']),
+                int(request.GET['finished_from_hour']),
+                int(request.GET['finished_from_minute'])
+        )
+        is_finished_to = request.GET.get('finished_to', False)
+        finished_to = datetime.datetime(
+                int(request.GET['finished_to_year']),
+                int(request.GET['finished_to_month']),
+                int(request.GET['finished_to_day']),
+                int(request.GET['finished_to_hour']),
+                int(request.GET['finished_to_minute'])
+        )
+        finished = request.GET.get('finished', False)
+        not_finished = request.GET.get('not_finished', False)
+
+        tasks = Task.objects.all()
+        if is_created_from == 'on':
+            tasks = tasks.filter(date_created__gte=created_from)
+        if is_created_to == 'on':
+            tasks = tasks.filter(date_created__lte=created_to)
+        if is_finished_from == 'on':
+            tasks = tasks.filter(date_completed__gte=finished_from)
+        if is_finished_to == 'on':
+            tasks = tasks.filter(date_completed__lte=finished_to)
+        if len(creator) != 0:
+            tasks = tasks.filter(creator=creator[0])
+        if len(responsible) != 0:
+            tasks = tasks.filter(responsible=responsible[0])
+        if finished is False:
+            if not_finished == 'on':
+                tasks = tasks.filter(completed=False)
+        else:
+            if not_finished is False:
+                tasks = tasks.filter(completed=True)
+
+        return render(request, 'my_task_manager/all_tasks.html', {
+            'tasks_list': tasks.order_by('date_created'),
+            'users_list': User.objects.all(),
+        })
+    else:
+        return render(request, 'my_task_manager/all_tasks.html', {
+            'tasks_list': Task.objects.order_by('date_created'),
+            'users_list': User.objects.all(),
+        })
