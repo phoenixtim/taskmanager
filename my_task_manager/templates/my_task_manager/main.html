@@ -1,0 +1,20 @@
+{% extends "my_task_manager/base_site.html" %}
+
+{% block content %}
+{% if user_tasks %}
+    <table>
+    <thead><tr><td>Creator</td><td>Task</td><td>Created</td></tr></thead>
+    <tbody>
+    {% for task in user_tasks %}
+        <tr>
+        <td>{{ task.creator }}</td>
+        <td><a href="{% url 'my_task_manager:task_detail' task.id %}">{{ task.text }}</a></td>
+        <td>{{ task.date_created }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% else %}
+    <p>You have no active tasks.</p>
+{% endif %}
+{% endblock %}

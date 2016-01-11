@@ -1,0 +1,24 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'authorization/style.css' %}">
+</head>
+<body>
+    <h3>Login</h3>
+
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+    <form action="{% url 'authorization:login' %}" method="post">
+        {% csrf_token %}
+        login: <input type="text" name="login">
+        password: <input type="password" name="password">
+        <input type="submit" value="Login">
+    </form>
+
+    <p><a href="{% url 'authorization:register' %}">Register</a></p>
+</body>
+</html>

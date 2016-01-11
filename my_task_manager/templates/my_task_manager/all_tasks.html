@@ -1,0 +1,93 @@
+{% extends "my_task_manager/base_site.html" %}
+
+{% block content %}
+    <p>
+    <form action="">
+        <label>Responsible:
+            <select required size="1" name="responsible">
+                <option value="All" selected>All</option>
+            {% for user_ in users_list %}
+                <option value="{{ user_.get_username }}">{{ user_.get_username }}</option>
+            {% endfor %}
+            </select>
+        </label>
+        <label>Creator:
+            <select required size="1" name="creator">
+                <option value="All" selected>All</option>
+            {% for user_ in users_list %}
+                <option value="{{ user_.get_username }}">{{ user_.get_username }}</option>
+            {% endfor %}
+            </select>
+        </label>
+        <br>
+        <label><input type="checkbox" name="created_from">Created from:
+            day<input type="number" name="created_from_day" min="1" max="31" required value="1">
+            month<input type="number" name="created_from_month" min="1" max="12" required value="1">
+            year<input type="number" name="created_from_year" min="1970" max="2029" required value="1970">
+            hour<input type="number" name="created_from_hour" min="0" max="23" required value="0">
+            minute<input type="number" name="created_from_minute" min="0" max="59" required value="0">
+        </label>
+        <br>
+        <label><input type="checkbox" name="created_to">Created to:
+            day<input type="number" name="created_to_day" min="1" max="31" required value="31">
+            month<input type="number" name="created_to_month" min="1" max="12" required value="12">
+            year<input type="number" name="created_to_year" min="1970" max="2029" required value="2029">
+            hour<input type="number" name="created_to_hour" min="0" max="23" required value="23">
+            minute<input type="number" name="created_to_minute" min="0" max="59" required value="59">
+        </label>
+        <br>
+        <label><input type="checkbox" name="finished_from">Finished from:
+            day<input type="number" name="finished_from_day" min="1" max="31" required value="1">
+            month<input type="number" name="finished_from_month" min="1" max="12" required value="1">
+            year<input type="number" name="finished_from_year" min="1970" max="2029" required value="1970">
+            hour<input type="number" name="finished_from_hour" min="0" max="23" required value="0">
+            minute<input type="number" name="finished_from_minute" min="0" max="59" required value="0">
+        </label>
+        <br>
+        <label><input type="checkbox" name="finished_to">Finished to:
+            day<input type="number" name="finished_to_day" min="1" max="31" required value="31">
+            month<input type="number" name="finished_to_month" min="1" max="12" required value="12">
+            year<input type="number" name="finished_to_year" min="1970" max="2029" required value="2029">
+            hour<input type="number" name="finished_to_hour" min="0" max="23" required value="23">
+            minute<input type="number" name="finished_to_minute" min="0" max="59" required value="59">
+        </label>
+        <br>
+        <label>Finished:
+            <input type="checkbox" name="finished" checked>
+        </label>
+        <label>Not finished:
+            <input type="checkbox" name="not_finished" checked>
+        </label>
+        <br>
+        <input type="reset" value="Reset">
+        <input type="submit" value="Filter">
+    </form>
+    </p>
+
+    {% if tasks_list %}
+        <table>
+        <thead><tr>
+            <td>Creator</td>
+            <td>Responsible</td>
+            <td>Task</td>
+            <td>Created</td>
+            <td>Completed</td>
+            <td>Completion date</td>
+        </tr></thead>
+        <tbody>
+        {% for task in tasks_list %}
+            <tr>
+            <td>{{ task.creator }}</td>
+            <td>{{ task.responsible }}</td>
+            <td><a href="{% url 'my_task_manager:task_detail' task.id %}">{{ task.text }}</a></td>
+            <td>{{ task.date_created }}</td>
+            <td>{{ task.completed }}</td>
+            <td>{{ task.date_completed }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+    {% else %}
+        <p>There are no tasks at all!</p>
+    {% endif %}
+{% endblock %}

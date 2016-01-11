@@ -19,6 +19,8 @@
     <option name="TEMPLATE_CONFIGURATION" value="Django" />
     <option name="TEMPLATE_FOLDERS">
       <list>
+        <option value="$MODULE_DIR$/authorization/templates" />
+        <option value="$MODULE_DIR$/my_task_manager/templates" />
         <option value="$MODULE_DIR$/templates" />
       </list>
     </option>

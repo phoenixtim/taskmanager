@@ -1,0 +1,17 @@
+{% extends "my_task_manager/base_site.html" %}
+
+{% block content %}
+<form action="{% url 'my_task_manager:create_task' %}" method="post">
+    {% csrf_token
+    %}
+    Responsible:
+    <select required size="1" name="responsible">
+    {% for user_ in users_list %}
+        <option value="{{ user_.get_username }}">{{ user_.get_username }}</option>
+    {% endfor %}
+    </select><br>
+    Text:
+    <textarea cols="80" rows="6" name="text" required maxlength="1000"></textarea>
+    <input type="submit" value="Create"><br>
+</form>
+{% endblock %}
