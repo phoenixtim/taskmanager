@@ -12,4 +12,6 @@ urlpatterns = [
         name='update_task'),
     url(r'^tasks/(?P<pk>[0-9]+)/$', views.TaskDetailView.as_view(),
         name='task_detail'),
+    url(r'^tasks/(?P<pk>[0-9]+)/completed/$', views.complete_task,
+        name='task_complete'),
 ]

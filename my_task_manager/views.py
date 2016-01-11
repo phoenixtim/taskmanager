@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from django.utils import timezone
 
 from .models import Task
 
@@ -37,38 +38,6 @@ class MainView(generic.ListView):
         return super(MainView, self).dispatch(*args, **kwargs)
 
 
-"""
-class CreateTaskView(generic.DetailView):
-    template_name = 'my_task_manager/create_task.html'
-    context_object_name = 'users_list'
-
-    def get_queryset(self):
-        return User.objects.all()
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(CreateTaskView, self).dispatch(*args, **kwargs)
-"""
-
-
-"""
-class UpdateTaskView(generic.DetailView):
-    model = Task
-    template_name = 'my_task_manager/update_task.html'
-    #context_object_name = 'users_list'
-
-    def get_context_data(self, **kwargs):
-        return User.objects.all()
-    def get_queryset(self):
-        users_list = {User.objects.all()}
-        return User.objects.order_by('username')
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(UpdateTaskView, self).dispatch(*args, **kwargs)
-"""
-
-
 @login_required
 def update_task_view(request, pk):
     task = get_object_or_404(Task, pk=pk)
@@ -76,6 +45,7 @@ def update_task_view(request, pk):
         'users_list': User.objects.all(),
         'task': task,
     })
+
 
 @login_required
 def update_task(request, pk):
@@ -117,3 +87,17 @@ class TaskDetailView(generic.DetailView):
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(TaskDetailView, self).dispatch(*args, **kwargs)
+
+
+@login_required
+def complete_task(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    if request.user != task.responsible:
+        return render(request, 'my_task_manager/task_detail.html', {
+            'error_message': "You can't complete another user task!",
+        })
+    else:
+        task.date_completed = timezone.now()
+        task.completed = True
+        task.save()
+        return HttpResponseRedirect(reverse('my_task_manager:main'))

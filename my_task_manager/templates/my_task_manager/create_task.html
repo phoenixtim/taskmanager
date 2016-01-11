@@ -2,7 +2,8 @@
 
 {% block content %}
 <form action="{% url 'my_task_manager:create_task' %}" method="post">
-    {% csrf_token %}
+    {% csrf_token
+    %}
     Responsible:
     <select required size="1" name="responsible">
     {% for user_ in users_list %}

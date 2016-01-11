@@ -8,9 +8,14 @@
     Completed: {% if task.completed %}Yes{% else %}No{% endif %}<br>
     Complete date: {{ task.date_completed }}<br>
 
+    {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+    <p>
     <form method="post">
         {% csrf_token %}
         <button formaction="{% url 'my_task_manager:update_task_view' task.id %}" type="submit">Change task</button>
-        <button formaction="{% url 'my_task_manager:main' %}" type="submit" {% if user != task.responsible %}disabled{% endif %}>Completed</button>
     </form>
+    <form method="get">
+        <button formaction="{% url 'my_task_manager:task_complete' task.id %}" type="submit" {% if user != task.responsible %}disabled{% endif %}>Completed</button>
+    </form>
+    </p>
 {% endblock %}
