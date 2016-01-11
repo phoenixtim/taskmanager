@@ -1,18 +1,20 @@
 {% extends "my_task_manager/base_site.html" %}
 
+{% block content %}
 {% if user_tasks %}
     <table>
     <thead><tr><td>Creator</td><td>Task</td><td>Created</td></tr></thead>
     <tbody>
-    <tr>
     {% for task in user_tasks %}
+        <tr>
         <td>{{ task.creator }}</td>
-        <td><a href="{% url '' %}">{{ task.text }}</a></td>
+        <td><a href="{% url 'my_task_manager:task_detail' task.id %}">{{ task.text }}</a></td>
         <td>{{ task.date_created }}</td>
+        </tr>
     {% endfor %}
-    </tr>
     </tbody>
     </table>
 {% else %}
-    <p>No polls are available.</p>
+    <p>You have no active tasks.</p>
 {% endif %}
+{% endblock %}

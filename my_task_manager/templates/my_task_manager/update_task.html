@@ -1,0 +1,20 @@
+{% extends "my_task_manager/base_site.html" %}
+
+{% block content %}
+<form action="{% url 'my_task_manager:update_task' task.id %}" method="post">
+    {% csrf_token %}
+    Responsible:
+    <select required size="1" name="responsible">
+    {% for usr in users_list %}
+        <option value="{{ usr.get_username }}" {% if task.responsible == usr.id %}selected{% endif %}>{{ usr.get_username }}</option>
+    {% endfor %}
+    </select><br>
+    Text:
+    <textarea cols="80" rows="6" name="text" required maxlength="1000">{{ task.text }}</textarea><br>
+    <input type="submit" value="Update"><br>
+    Creator: {{ task.creator }}<br>
+    Creation date: {{ task.date_created }}<br>
+    Completed: {% if task.completed %}Yes{% else %}No{% endif %}<br>
+    Complete date: {{ task.date_completed }}<br>
+</form>
+{% endblock %}

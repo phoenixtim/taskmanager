@@ -38,3 +38,8 @@ def register(request):
             return render(request, 'authorization/register.html', {
                 'error_message': "User is already exist! Choose another login."
             })
+
+
+def log_out(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('my_task_manager:index'))

@@ -10,10 +10,15 @@
         {% block header %}
             <section>
                 <header>
-                    <form action="" method="post"><h4>
+                    <h4><form method="get">
+                        {% csrf_token %}
                         Welcome, {{ user.get_username }}!
-                        <input type="submit" value="logout">
-                    </h4></form>
+                        <button formaction="{% url 'authorization:logout' %}" type="submit">Logout</button>
+                        <button formaction="{% url 'my_task_manager:main' %}" type="submit">Main</button>
+                        <button formaction="" type="submit">All tasks</button>
+                        <button formaction="{% url 'my_task_manager:create_task' %}" type="submit">Create task</button>
+                    </form></h4>
+
                 </header>
             </section>
         {% endblock %}
